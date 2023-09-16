@@ -1,1 +1,7 @@
-# interview-coraline-1
+# Usage
+
+###  Start
+
+```code
+docker-compose up
+```
