@@ -13,7 +13,7 @@ services:
     depends_on: 
       - server
     ports:
-      - 3000:3000
+      - "4000:3000"
     links:
       - server
     restart: unless-stopped
@@ -24,30 +24,49 @@ services:
       dockerfile: Dockerfile
       context: ./server
       target: development
-    env_file: ./server/.env
     volumes:
       - ./server:/server
       - /server/node_modules/
     command: npm run start:debug
-    depends_on: 
+    depends_on:
       - db
+      - db_shadow
     ports:
-      - 4000:4000
+      - "3000:3000"
     restart: unless-stopped
+    env_file: ./server/.env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      SHADOW_DATABASE_URL: ${SHADOW_DATABASE_URL}
+
 
   db:
-    image: mysql:5.7
+    image: mysql:8.0
     platform: linux/x86_64
     container_name: db
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+
+  db_shadow:
+    image: mysql:8.0
+    platform: linux/x86_64
+    container_name: db_shadow
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data_shadow:/var/lib/mysql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -60,7 +79,8 @@ services:
       PMA_ARBITRARY: 1
     restart: always
     ports:
-      - 8081:80
+      - "8081:80"
 
 volumes:
   db_data:
+  db_data_shadow:
