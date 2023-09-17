@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  // binaryTargets = ["native", "linux-musl", "linux-arm-openssl-1.1.x"]
+  // binaryTargets = ["rhel-openssl-1.0.x", "native", "linux-arm64-openssl-1.1.x"]
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = "mysql://admin:admin@db:3306/app_db" //env("DATABASE_URL")
+  shadowDatabaseUrl = "mysql://admin:admin@db:3307/app_db" //env("SHADOW_DATABASE_URL")
+}
+
+model GameStat {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  value Int?
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  name      String  @unique
+  password  String? @unique
+  score     Int     @default(0)
+  highScore Int     @default(0)
+}
