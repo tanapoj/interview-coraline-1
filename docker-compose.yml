@@ -42,7 +42,7 @@ services:
 
   db:
     image: mysql:8.0
-    platform: linux/x86_64
+#    platform: linux/x86_64
     container_name: db
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -56,7 +56,7 @@ services:
 
   db_shadow:
     image: mysql:8.0
-    platform: linux/x86_64
+#    platform: linux/x86_64
     container_name: db_shadow
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
