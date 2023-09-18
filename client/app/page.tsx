@@ -36,7 +36,7 @@ export default function Home() {
     function loadHighScore() {
         api.getScore().then(({highScore, score}) => {
             setHighScore(highScore)
-            setYourScore(score)
+            //setYourScore(score)
         })
     }
 
